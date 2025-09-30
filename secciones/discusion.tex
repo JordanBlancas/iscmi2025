@@ -1,15 +1,43 @@
 % Discussion
 % =============================
-% This section analyzes the implications, limitations, and future directions of the fuzzy grading model.
-% TODO: Expand on limitations and possible improvements
+% This section analyzes the implications, limitations, and contributions of the fuzzy assessment model.
 
 \section{Discussion}
 
-The results demonstrate that fuzzy logic can effectively bridge the gap between subjective teacher judgment and automated grading, supporting a more holistic and student-centered approach. However, several challenges remain:
-\begin{itemize}
-	\item The need for careful calibration of membership functions and rules \cite{Santos2022}
-	\item Potential resistance from educators unfamiliar with fuzzy systems \cite{Wang2023}
-	\item Scalability and integration with existing learning management systems \cite{Smith2023}
-\end{itemize}
+\subsection{Reduction of Subjectivity in Assessment}
 
-Despite these limitations, the model offers a promising path toward fairer and more meaningful assessment in remote and hybrid education.
+The implementation of fuzzy logic in continuous assessment demonstrates significant potential for reducing subjective bias while maintaining pedagogical flexibility. Unlike traditional grading systems that rely heavily on instructor discretion for borderline cases, the fuzzy approach provides consistent evaluation criteria through its rule-based inference mechanism. The systematic application of membership functions and expert-designed rules ensures that similar student performance patterns receive comparable assessment outcomes, regardless of the individual instructor's subjective preferences \cite{Ahmed2023, Chen2023}.
+
+However, it is important to note that the fuzzy system does not eliminate subjectivity entirely but rather formalizes and systematizes expert judgment. The design of membership functions and rule bases still requires pedagogical expertise and contextual understanding. The key advantage lies in making these subjective decisions explicit, transparent, and consistently applied across all assessment instances \cite{Kumar2023}.
+
+\subsection{Implications for Competency-Based Evaluation}
+
+The results demonstrate that fuzzy logic effectively addresses the fundamental limitations of discrete competency scales by providing graduated assessment mechanisms that better reflect the continuous nature of learning progression. The reduction in borderline cases from 34\% to 12\% indicates that fuzzy systems can significantly improve the fairness and accuracy of competency-based evaluation, particularly in remote learning contexts where traditional assessment methods may be inadequate \cite{Garcia2024}.
+
+The fuzzy approach enables more nuanced recognition of partial competency achievement, which is particularly valuable for students who demonstrate understanding in some aspects of a competency while still developing others. This granular evaluation supports differentiated instruction and targeted intervention strategies that are often impossible with binary competency classifications \cite{Martinez2024, Brown2024}.
+
+Furthermore, the integration of multiple assessment variables through fuzzy inference provides a more comprehensive view of student competency than single-metric approaches. The system's ability to identify students with mixed performance patterns (high participation, moderate assignments) offers valuable insights for personalized learning support and academic advising.
+
+\subsection{Comparison with Traditional Grading Methods}
+
+The comparative analysis reveals several critical advantages of fuzzy assessment over traditional grading approaches. The improved grade distribution equity (skewness reduction from -0.42 to 0.15) suggests that fuzzy systems produce more realistic representations of student performance variation, avoiding the artificial clustering around grade boundaries typical of discrete scales.
+
+The reduced threshold sensitivity (from 23\% to 8\% for borderline students) indicates that fuzzy assessment provides more stable and predictable outcomes, which is particularly important for high-stakes academic decisions such as course progression, scholarship eligibility, and graduation requirements. This stability enhances the perceived fairness of the assessment system and may reduce student anxiety associated with arbitrary grade boundaries \cite{Wilson2024}.
+
+Additionally, the 18\% increase in multi-dimensional recognition demonstrates that fuzzy systems can capture performance complexity that traditional averaging methods often obscure. This capability is especially valuable in remote learning environments where diverse forms of engagement and demonstration of learning must be appropriately recognized and valued.
+
+\subsection{Limitations and Challenges}
+
+Despite the promising results, several limitations must be acknowledged regarding the implementation and adoption of fuzzy logic-based assessment systems:
+
+\textbf{Rule Design Dependency:} The effectiveness of fuzzy assessment systems is heavily dependent on the quality and comprehensiveness of the expert-designed rule base. Poorly constructed rules or incomplete coverage of performance scenarios can lead to unexpected or inappropriate assessment outcomes. The development of robust rule bases requires significant pedagogical expertise and iterative refinement based on empirical feedback \cite{Chen2023}.
+
+\textbf{Computational Complexity:} While modern computing resources make fuzzy inference tractable for most educational applications, the computational requirements may pose challenges for large-scale implementations or real-time assessment scenarios. Integration with existing learning management systems may require substantial technical infrastructure development.
+
+\textbf{Institutional Resistance:} Educational institutions accustomed to traditional grading systems may resist the adoption of fuzzy assessment approaches due to concerns about interpretation, standardization, and external accountability requirements. The apparent complexity of fuzzy systems may create barriers to acceptance among administrators, faculty, and students who prefer simpler, more familiar evaluation methods.
+
+\textbf{Empirical Validation Needs:} While simulation studies provide valuable insights, the proposed system requires extensive real-world validation with actual student populations across diverse educational contexts. The generalizability of results across different subjects, student demographics, and institutional settings remains to be demonstrated through longitudinal empirical studies.
+
+\textbf{Calibration and Maintenance:} Fuzzy assessment systems require ongoing calibration and adjustment to maintain optimal performance as educational contexts evolve. The membership functions and rule bases may need periodic revision based on changing pedagogical priorities, technological capabilities, and student population characteristics \cite{Ahmed2023, Kumar2023}.
+
+These limitations highlight the need for careful implementation planning, stakeholder engagement, and continuous evaluation when deploying fuzzy logic-based assessment systems in real educational environments.

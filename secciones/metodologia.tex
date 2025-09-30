@@ -1,19 +1,147 @@
 % Methodology
 % =============================
-% This section describes the design of the fuzzy grading system and the variables considered.
-% TODO: Add a diagram of the fuzzy inference system in /figuras
+% This section describes the design and implementation of the fuzzy logic assessment system.
 
 \section{Methodology}
 
-The proposed grading model is based on a fuzzy inference system that integrates multiple variables relevant to continuous assessment in remote or hybrid environments. The methodology consists of three main stages: (1) identification of linguistic variables, (2) definition of fuzzy rules, and (3) implementation and validation of the system.
+This section presents the detailed design and implementation of our fuzzy logic-based continuous assessment system. The methodology follows a systematic approach to transform subjective educational variables into a coherent, transparent, and fair evaluation framework suitable for remote and hybrid learning environments.
 
-\subsection{Linguistic Variables}
-The model considers both quantitative and qualitative variables, such as participation, assignment submission, self-assessment, and peer evaluation. Each variable is represented by linguistic terms (e.g., low, medium, high) and associated membership functions \cite{Santos2022, Wang2023}.
+\subsection{Input Variables}
 
-\subsection{Fuzzy Rules}
-Expert knowledge from educators is encoded into a set of fuzzy rules that describe how the input variables combine to produce a final grade. The rules are designed to reflect pedagogical priorities, such as rewarding active participation and consistent effort \cite{Lopez2021}.
+The proposed fuzzy assessment system integrates three primary input variables that collectively capture the multidimensional nature of student learning in remote environments:
 
-\subsection{Implementation and Validation}
-The fuzzy system is implemented using MATLAB and Python, allowing for simulation and real-world application. Validation is performed through case studies and comparison with traditional grading methods, demonstrating improved fairness and support for meaningful learning \cite{Nguyen2020, Smith2023}.
+\textbf{Participation (P):} This variable quantifies student engagement across various learning activities including synchronous class attendance, discussion forum contributions, question asking frequency, and collaborative activity involvement. Participation is measured on a 0-100 scale where values are derived from learning management system analytics combined with instructor observations \cite{Kumar2024}.
 
-% TODO: Include code snippets or pseudocode for the fuzzy system
+\textbf{Assignments (A):} This variable encompasses assignment submission timeliness, quality of work, adherence to requirements, and demonstration of learning objectives. The assignment score integrates both quantitative metrics (submission rates, rubric scores) and qualitative assessments (creativity, critical thinking evidence) on a 0-100 scale \cite{Anderson2022}.
+
+\textbf{Self-assessment (S):} This variable captures students' metacognitive awareness and self-reflection capabilities through structured self-evaluation activities, learning journals, and goal-setting exercises. Self-assessment scores reflect the quality and depth of student reflection rather than self-reported performance measurements \cite{Brown2023}.
+
+Each input variable is normalized to a [0,100] range to ensure consistency and facilitate fuzzy processing. The selection of these variables is based on extensive literature review and their proven correlation with meaningful learning outcomes in remote educational contexts.
+
+\subsection{Membership Functions}
+
+The system employs triangular and trapezoidal membership functions to transform crisp input values into fuzzy sets. For each input variable, three linguistic categories are defined:
+
+\textbf{Low:} Triangular function with parameters (0, 0, 40) representing below-average performance
+\textbf{Medium:} Triangular function with parameters (20, 50, 80) representing satisfactory performance  
+\textbf{High:} Triangular function with parameters (60, 100, 100) representing excellent performance
+
+The triangular membership function is defined as:
+
+\begin{equation}
+\mu(x; a, b, c) = \begin{cases}
+0 & \text{if } x \leq a \\
+\frac{x - a}{b - a} & \text{if } a < x \leq b \\
+\frac{c - x}{c - b} & \text{if } b < x < c \\
+0 & \text{if } x \geq c
+\end{cases}
+\end{equation}
+
+For competency score mapping, trapezoidal functions provide more precise control:
+\begin{itemize}
+\item \textbf{Level 0:} Trapezoidal [0, 0, 5, 6] - Inadequate competency
+\item \textbf{Level 1:} Trapezoidal [5, 8, 10, 11] - Developing competency  
+\item \textbf{Level 2:} Trapezoidal [10, 12, 15, 16] - Proficient competency
+\item \textbf{Level 3:} Trapezoidal [15, 17, 20, 20] - Advanced competency
+\end{itemize}
+
+The overlapping nature of these functions ensures smooth transitions between categories, avoiding the harsh boundaries characteristic of traditional discrete scales. The membership functions for all input variables follow similar triangular patterns with carefully calibrated overlap regions to ensure continuous assessment coverage.
+
+\subsection{Rule Base}
+
+The fuzzy rule base consists of 27 IF-THEN rules that capture expert pedagogical knowledge regarding the relationship between input variables and final assessment outcomes. Table~\ref{tab:rulebase} presents the complete rule base with representative rules showing the logical relationships between input variables and competency outcomes.
+
+\begin{table}[htbp]
+\caption{Representative Fuzzy Rule Base for Competency Assessment}
+\label{tab:rulebase}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Rule} & \textbf{Participation} & \textbf{Assignments} & \textbf{Self-Assessment} & \textbf{Output Grade} \\
+\hline
+R1 & High & High & High & Excellent \\
+R2 & High & High & Medium & Good \\
+R3 & High & Medium & High & Good \\
+R4 & Medium & High & High & Good \\
+R5 & Medium & Medium & Medium & Satisfactory \\
+R6 & Low & High & Medium & Satisfactory \\
+R7 & Low & Low & Low & Poor \\
+\hline
+\end{tabular}
+\end{table}
+
+The complete implementation in \texttt{codigo/fuzzy\_assessment.py} contains all 27 rules, covering the complete combination space of input variables. Rules are designed to emphasize collaborative evidence: high performance in any two variables can compensate for moderate performance in the third, reflecting the holistic nature of competency development \cite{Garcia2024}.
+
+The rule base was developed through consultation with educational experts and validated against existing grading practices to ensure pedagogical validity \cite{Garcia2024}.
+
+\subsection{Fuzzy Inference}
+
+The system employs the Mamdani fuzzy inference method, which provides intuitive rule interpretation and transparent reasoning processes. The inference procedure consists of four steps:
+
+1. \textbf{Fuzzification:} Convert crisp input values to fuzzy membership degrees
+2. \textbf{Rule Evaluation:} Apply fuzzy AND operations to determine rule activation levels
+3. \textbf{Aggregation:} Combine activated rule consequences using fuzzy OR operations  
+4. \textbf{Output Generation:} Produce a fuzzy output set representing the assessment result
+
+The Mamdani approach was selected over alternatives (such as Sugeno) due to its interpretability and alignment with human reasoning patterns, crucial factors for educational applications where transparency is essential \cite{Johnson2023}.
+
+\subsection{Defuzzification}
+
+The final step converts the fuzzy output set into a crisp numerical grade using the centroid defuzzification method. This approach calculates the center of gravity of the output membership function, providing a balanced representation of all activated rules:
+
+\begin{equation}
+\text{Grade} = \frac{\int \mu(x) \cdot x \, dx}{\int \mu(x) \, dx}
+\end{equation}
+
+where $\mu(x)$ represents the aggregated output membership function. The resulting grade falls within the [0,100] range and can be mapped to institutional grading scales as needed.
+
+The complete fuzzy assessment system architecture follows a systematic flow from input variables through inference to final grade determination. The system design prioritizes transparency, allowing educators to trace how specific input combinations lead to particular assessment outcomes, thereby supporting both automated evaluation and human oversight.
+
+\subsection{Inference (Mamdani) and Aggregation}
+
+The Mamdani inference method processes the fuzzy rule base by computing the degree of activation for each rule and aggregating the results. For each rule $R_j$: IF $x_1$ is $A_{1j}$ AND $x_2$ is $A_{2j}$ AND $x_3$ is $A_{3j}$ THEN $y$ is $B_j$, the firing strength is calculated as:
+
+\begin{equation}
+\alpha_j = \min(\mu_{A_{1j}}(x_1), \mu_{A_{2j}}(x_2), \mu_{A_{3j}}(x_3))
+\end{equation}
+
+The consequent fuzzy set for each rule is clipped at the firing strength level:
+
+\begin{equation}
+\mu_{B_j}'(y) = \min(\alpha_j, \mu_{B_j}(y))
+\end{equation}
+
+All clipped consequents are aggregated using the maximum operator:
+
+\begin{equation}
+\mu_{output}(y) = \max_j(\mu_{B_j}'(y))
+\end{equation}
+
+\subsection{Defuzzification}
+
+The centroid method is employed for defuzzification, converting the aggregated fuzzy output to a crisp value:
+
+\begin{equation}
+\text{Grade} = \frac{\int \mu_{output}(y) \cdot y \, dy}{\int \mu_{output}(y) \, dy}
+\end{equation}
+
+For discrete implementation, the centroid formula becomes:
+
+\begin{equation}
+\text{Grade} = \frac{\sum_{i=1}^{n} \mu_{output}(y_i) \cdot y_i}{\sum_{i=1}^{n} \mu_{output}(y_i)}
+\end{equation}
+
+where $y_i$ represents discrete output values and $n$ is the number of discrete points in the output universe.
+
+\subsection{Decision Policy}
+
+The system implements operational thresholds for advisory actions based on the fuzzy output:
+
+\begin{itemize}
+\item \textbf{Keep Official Grade:} If $\mu_{official} \geq 0.8$, maintain current competency level
+\item \textbf{Evidence Review:} If $\mu_{official} < 0.6$ AND $\mu_{upper} \geq 0.25$, offer evidence portfolio review
+\item \textbf{Oral Defense:} If $\mu_{official} < 0.5$ AND $\mu_{upper} \geq 0.4$, suggest oral competency demonstration
+\item \textbf{Additional Support:} If $\mu_{official} < 0.3$, recommend academic intervention
+\end{itemize}
+
+These thresholds provide systematic guidance for instructors while preserving pedagogical flexibility and maintaining focus on student learning support rather than punitive measures.
